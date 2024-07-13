@@ -1,5 +1,10 @@
-Lệnh init package.json: npm init
-Lệnh create react app: npx create-react-app client
+.Backend
+- Lệnh init package.json: npm init
+
+.Frontend
+- Lệnh generate code: rafce 
+- Lệnh create react app: npx create-react-app client
 + tailwindcss
 1. Lệnh install tailwind css: npm install -D tailwindcss
 2. Lệnh init config tailwind: npx tailwindcss init
+- Lệnh cài thư viện react-router-dom: npm i react-router-dom
