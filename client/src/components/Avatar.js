@@ -44,7 +44,10 @@ const Avatar = ({ userID, name, imageUrl, width, height }) => {
           {AvatarName}
         </div>
       ) : (
-        <FaUserAstronaut size={60} className="mx-auto mt-2" />
+        <FaUserAstronaut
+          size={width}
+          className="mx-auto mt-2 overflow-hidden"
+        />
       )}
     </div>
   );
