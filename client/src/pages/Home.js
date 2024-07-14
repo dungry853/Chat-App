@@ -1,11 +1,12 @@
 import axios from "axios";
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { Outlet } from "react-router-dom";
-
+import { useDispatch, useSelector } from "react-redux";
+import { Outlet, useNavigate } from "react-router-dom";
+import { logout, setUser } from "../redux/userSlice";
 const Home = () => {
   const user = useSelector((state) => state.user);
-  console.log("Redux User: ", user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
@@ -15,7 +16,11 @@ const Home = () => {
           url: URL,
           withCredentials: true,
         });
-        console.log("Current User Details", response);
+        dispatch(setUser(response.data.data));
+        if (response.data.logout) {
+          dispatch(logout());
+          navigate("/email");
+        }
       } catch (error) {
         console.log("error", error);
       }

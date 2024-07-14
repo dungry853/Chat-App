@@ -25,7 +25,7 @@ const CheckEmailPage = () => {
     try {
       const response = await axios.post(URL, data);
       toast.success(response.data.message);
-      if (response.data.message) {
+      if (response.data.success) {
         setData({
           email: "",
         });
