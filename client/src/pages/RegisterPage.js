@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import uploadFile from "../helpers/uploadFile";
+import axios from "axios";
+import toast from "react-hot-toast";
 const RegisterPage = () => {
   const [data, setData] = useState({
     name: "",
@@ -10,6 +12,9 @@ const RegisterPage = () => {
     profile_pic: "",
   });
   const [uploadPhoto, setUploadPhoto] = useState("");
+
+  const navigate = useNavigate();
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setData((preve) => {
@@ -22,8 +27,6 @@ const RegisterPage = () => {
 
   const handleUploadPhoto = async (e) => {
     const file = e.target.files[0];
-    const uploadPhoto = await uploadFile(file);
-    console.log("uploadPhoto", uploadPhoto);
     setUploadPhoto(file);
   };
 
@@ -33,13 +36,45 @@ const RegisterPage = () => {
     e.preventDefault(); //Ngăn chặn hành động mặc định của sự kiện button
     setUploadPhoto(null);
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("data: ", data);
+    const uploadFilePhoto = await uploadFile(uploadPhoto);
+    console.log("uploadPhoto", uploadFilePhoto);
+    console.log("URL PHOTO: ", uploadFilePhoto?.url);
+    setData((preve) => {
+      return {
+        ...preve,
+        profile_pic: uploadFilePhoto.url,
+      };
+    });
+
+    // eslint-disable-next-line no-undef
   };
+  //Sử dụng useEffect để theo dõi sự thay đổi của profile_pic và sau đó đăng ký, vì useState sẽ cập nhật sau lần render tiếp theo
+  useEffect(() => {
+    const register = async () => {
+      const URL = `${process.env.REACT_APP_BACKEND_URL}/api/register`;
+      try {
+        const response = await axios.post(URL, data);
+        toast.success(response.data.message);
+        if (response.data.message) {
+          setData({
+            name: "",
+            email: "",
+            password: "",
+            profile_pic: "",
+          });
+          navigate("/email");
+        }
+      } catch (error) {
+        toast.error(error?.response?.data?.message);
+      }
+    };
+    register();
+  }, [data.profile_pic]);
   return (
-    <div className="">
+    <div className="mt-5">
       <div className="bg-white w-full max-w-md  rounded overflow-hidden p-4 md:mx-auto my-5">
         <h3 className="text-center">Welcome to Chat App!</h3>
 
