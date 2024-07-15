@@ -28,6 +28,7 @@ const EditUserDetails = ({ onClose, user }) => {
   useEffect(() => {
     if (isUploadPhoto) {
       uploadToDB();
+      setIsUploadPhoto(false);
     }
   }, [isUploadPhoto]);
   const handleOnChange = (e) => {
