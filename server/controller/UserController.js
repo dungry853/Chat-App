@@ -145,10 +145,33 @@ async function updateUserDetails(req, res) {
     });
   }
 }
+
+async function searchUser(req, res) {
+  try {
+    const { search } = req.body;
+    const query = new RegExp(search, "i"); //i: bỏ qua chữ hoa chữ thường, g: tìm tất cả matches trong chuỗi, không chỉ đầu tiên
+
+    const user = await UserModel.find({
+      $or: [{ name: query }, { email: query }],
+    }).select("-password");
+
+    return res.json({
+      message: "all user",
+      data: user,
+      success: true,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+    });
+  }
+}
 module.exports = {
   registerUser,
   checkEmail,
   checkPassword,
   userDetails,
   updateUserDetails,
+  searchUser,
 };

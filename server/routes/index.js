@@ -5,6 +5,7 @@ const {
   checkPassword,
   userDetails,
   updateUserDetails,
+  searchUser,
 } = require("../controller/UserController");
 const logout = require("../controller/logout");
 
@@ -24,5 +25,6 @@ router.post("/register", registerUser);
 router.get("/logout", logout);
 //Update User
 router.post("/update-user", updateUserDetails);
-
+//Search all user
+router.post("/search-user", searchUser);
 module.exports = router;
