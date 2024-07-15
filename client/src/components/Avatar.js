@@ -25,7 +25,7 @@ const Avatar = ({ userID, name, imageUrl, width, height }) => {
   const randomNumber = Math.floor(Math.random() * bgColor.length);
   return (
     <div
-      className={`text-slate-800 shadow overflow-hidden rounded-full text-xl font-bold border ${bgColor[randomNumber]}`}
+      className={`text-slate-800 shadow overflow-hidden rounded-full text-xl font-bold border ${bgColor[randomNumber]} flex justify-center`}
       style={{ width: width + "px", height: height + "px" }}
     >
       {imageUrl ? (
@@ -34,7 +34,7 @@ const Avatar = ({ userID, name, imageUrl, width, height }) => {
           width={width}
           height={height}
           alt={name}
-          className="overflow-hidden"
+          className="overflow-hidden bg-center bg-no-repeat"
         />
       ) : name ? (
         <div
