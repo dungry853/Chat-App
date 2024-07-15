@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import EditUserDetails from "./EditUserDetails";
 const Sidebar = () => {
   const user = useSelector((state) => state?.user);
-  const [editUserOpen, setEditUserOpen] = useState(true);
+  const [editUserOpen, setEditUserOpen] = useState(false);
   return (
     <div className="w-full h-full">
       <div className="bg-slate-100 w-12 h-full rounded-tr-lg rou-br-lg py-5 text-slate-600 flex flex-col justify-between">

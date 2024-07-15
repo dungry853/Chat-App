@@ -4,7 +4,8 @@ import Divider from "./Divider";
 import toast from "react-hot-toast";
 import axios from "axios";
 import uploadFile from "../helpers/uploadFile";
-
+import { useDispatch } from "react-redux";
+import { setUser } from "../redux/userSlice";
 const EditUserDetails = ({ onClose, user }) => {
   const [data, setData] = useState({
     name: user?.name,
@@ -14,6 +15,7 @@ const EditUserDetails = ({ onClose, user }) => {
   const [uploadPhoto, setUploadPhoto] = useState(null);
   const [isUploadPhoto, setIsUploadPhoto] = useState(false);
   const uploadPhotoRef = useRef();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setData((prev) => {
@@ -83,9 +85,10 @@ const EditUserDetails = ({ onClose, user }) => {
       });
       toast.success(Response.data.message);
       console.log(Response.data);
-      //   if (Response.data.success) {
-      //     setUploadPhoto(null);
-      //   }
+      if (Response.data.success) {
+        dispatch(setUser(Response.data.data));
+        onClose();
+      }
     } catch (error) {
       toast.error(error?.response?.data?.message);
     }
