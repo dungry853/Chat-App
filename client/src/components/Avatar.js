@@ -1,6 +1,9 @@
 import React from "react";
 import { FaUserAstronaut } from "react-icons/fa";
+import { useSelector } from "react-redux";
 const Avatar = ({ userID, name, imageUrl, width, height }) => {
+  const onlineUser = useSelector((state) => state?.user?.onlineUser);
+
   let AvatarName = "";
 
   if (name) {
@@ -23,9 +26,11 @@ const Avatar = ({ userID, name, imageUrl, width, height }) => {
     "bg-blue-200",
   ];
   const randomNumber = Math.floor(Math.random() * bgColor.length);
+
+  const isOnline = onlineUser.includes(userID);
   return (
     <div
-      className={`text-slate-800 shadow overflow-hidden rounded-full text-xl font-bold border ${bgColor[randomNumber]} flex justify-center`}
+      className={`text-slate-800 shadow  relative rounded-full text-xl font-bold border ${bgColor[randomNumber]} flex justify-center`}
       style={{ width: width + "px", height: height + "px" }}
     >
       {imageUrl ? (
@@ -34,7 +39,7 @@ const Avatar = ({ userID, name, imageUrl, width, height }) => {
           width={width}
           height={height}
           alt={name}
-          className="overflow-hidden bg-center bg-no-repeat"
+          className="overflow-hidden bg-center rounded-full bg-no-repeat"
         />
       ) : name ? (
         <div
@@ -48,6 +53,9 @@ const Avatar = ({ userID, name, imageUrl, width, height }) => {
           size={width}
           className="mx-auto mt-2 overflow-hidden"
         />
+      )}
+      {isOnline && (
+        <div className="bg-green-600 p-1 absolute bottom-1 right-0 z-10  rounded-full"></div>
       )}
     </div>
   );
