@@ -25,8 +25,12 @@ const MessagePage = () => {
     online: false,
   });
   const [openImageVideoUpload, setOpenImageVideoUpload] = useState(false);
+
   const [uploadImage, setUploadImage] = useState(null);
+  const [isUploadImage, setIsUploadImage] = useState(false);
+
   const [uploadVideo, setUploadVideo] = useState(null);
+  const [isUploadVideo, setIsUploadVideo] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({
     text: "",
@@ -42,6 +46,7 @@ const MessagePage = () => {
       console.log(uploadImage);
     }
   }, [uploadImage]);
+
   const handleUploadImage = (e) => {
     const file = e.target.files[0];
     console.log(file);
@@ -55,6 +60,7 @@ const MessagePage = () => {
           file: file,
         });
         setLoading(false);
+        setIsUploadImage(true);
       };
       reader.readAsDataURL(file);
     }
@@ -71,6 +77,7 @@ const MessagePage = () => {
           file: file,
         });
         setLoading(false);
+        setIsUploadVideo(false);
       };
       reader.readAsDataURL(file);
     }
