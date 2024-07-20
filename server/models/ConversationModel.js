@@ -19,6 +19,11 @@ const messageSchema = moongose.Schema(
       type: Boolean,
       default: false,
     },
+    msgByUserID: {
+      type: moongose.Schema.ObjectId,
+      required: true,
+      ref: "User",
+    },
   },
   {
     timestamps: true,
