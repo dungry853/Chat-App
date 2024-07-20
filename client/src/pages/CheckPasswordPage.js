@@ -57,9 +57,9 @@ const CheckPasswordPage = () => {
   };
   return (
     <div>
-      <div className="mt-5">
+      <div className="mt-5 flex flex-col justify-center items-center">
         <div className="bg-white w-full max-w-md  rounded overflow-hidden p-4 md:mx-auto my-5">
-          <div className="w-fit mx-auto mb-2">
+          <div className="w-fit mx-auto mb-2 flex flex-col justify-center items-center">
             <Avatar
               name={location?.state?.name}
               imageUrl={location?.state?.profile_pic}

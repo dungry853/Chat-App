@@ -13,24 +13,18 @@ const EditUserDetails = ({ onClose, user }) => {
   });
 
   const [uploadPhoto, setUploadPhoto] = useState(null);
-  const [isUploadPhoto, setIsUploadPhoto] = useState(false);
   const uploadPhotoRef = useRef();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    setData((prev) => {
-      return {
-        ...prev,
-        ...user,
-      };
-    });
-  }, [user]);
-  useEffect(() => {
-    if (isUploadPhoto) {
-      uploadToDB();
-      setIsUploadPhoto(false);
-    }
-  }, [isUploadPhoto]);
+  // useEffect(() => {
+  //   setData((prev) => {
+  //     return {
+  //       ...prev,
+  //       ...user,
+  //     };
+  //   });
+  // }, [user]);
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setData((prev) => {
@@ -58,30 +52,22 @@ const EditUserDetails = ({ onClose, user }) => {
       reader.readAsDataURL(file);
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    const uploadFilePhoto = await uploadFile(uploadPhoto?.file);
-    console.log(uploadFilePhoto?.url);
-    setData((prev) => {
-      return {
-        ...prev,
-        profile_pic: uploadFilePhoto.url
-          ? uploadFilePhoto.url
-          : prev?.profile_pic,
-      };
-    });
-    setIsUploadPhoto(true);
-  };
-
-  const uploadToDB = async () => {
     const URL = `${process.env.REACT_APP_BACKEND_URL}/api/update-user`;
     try {
+      const uploadFilePhoto = await uploadFile(uploadPhoto?.file);
+      let updatedUserData = { ...data };
+      updatedUserData.profile_pic = uploadFilePhoto.url;
+      console.log(updatedUserData);
+
       const Response = await axios({
         method: "POST",
         url: URL,
-        data: data,
+        data: updatedUserData,
         withCredentials: true,
       });
       toast.success(Response.data.message);
@@ -94,6 +80,7 @@ const EditUserDetails = ({ onClose, user }) => {
       toast.error(error?.response?.data?.message);
     }
   };
+
   return (
     <div className="fixed top-0 bottom-0 left-0 right-0 bg-gray-700 bg-opacity-40 flex justify-center items-center z-10">
       <div className="bg-white p-4 m-1 rounded w-full max-w-sm">
