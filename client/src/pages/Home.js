@@ -28,7 +28,8 @@ const Home = () => {
           withCredentials: true,
         });
         dispatch(setUser(response.data.data));
-        if (response.data.logout) {
+        console.log(response.data);
+        if (response.data.data.logout) {
           dispatch(logout());
           navigate("/email");
         }

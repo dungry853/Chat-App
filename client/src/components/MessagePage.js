@@ -170,6 +170,8 @@ const MessagePage = () => {
     if (socketConnection) {
       socketConnection.emit("message-page", params.userID);
 
+      socketConnection.emit("seen", params.userID);
+
       socketConnection.on("message-user", (data) => {
         setDataUser(data);
       });
