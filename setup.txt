@@ -1,6 +1,8 @@
 .Backend
 - Lệnh init package.json: npm init
 
+
+
 .Frontend
 - Lệnh generate code: rafce 
 - Lệnh create react app: npx create-react-app client
