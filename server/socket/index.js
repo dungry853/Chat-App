@@ -47,7 +47,7 @@ io.on("connection", async (socket) => {
       online: onlineUser.has(userID),
     };
 
-    socket.emit("message-user", payload);
+    socket.emit("message-user", payload || undefined);
 
     //previous Message
     const getConversationMessage = await ConversationModel.findOne({
@@ -59,7 +59,7 @@ io.on("connection", async (socket) => {
       .populate("messages")
       .sort({ updatedAt: -1 });
 
-    socket.emit("message", getConversationMessage?.messages);
+    socket.emit("message", getConversationMessage?.messages || undefined);
   });
 
   //new-message
@@ -105,10 +105,42 @@ io.on("connection", async (socket) => {
       .populate("messages")
       .sort({ updatedAt: -1 });
 
-    io.to(data?.sender).emit("message", getConversationMessage.messages);
-    io.to(data?.receiver).emit("message", getConversationMessage.messages);
+    io.to(data?.sender).emit("message", getConversationMessage.messages || []);
+    io.to(data?.receiver).emit(
+      "message",
+      getConversationMessage.messages || []
+    );
   });
+  //sidebar
+  socket.on("sidebar", async (currentUserID) => {
+    console.log("Current User", currentUserID);
+    if (currentUserID) {
+      const currentUserConversation = await ConversationModel.find({
+        $or: [{ sender: currentUserID }, { receiver: currentUserID }],
+      })
+        .sort({ updatedAt: -1 })
+        .populate("messages")
+        .populate("sender")
+        .populate("receiver");
 
+      console.log("currentUserConversation", currentUserConversation);
+      const conversation = currentUserConversation.map((conv) => {
+        const countUnseenMsg = conv.messages.reduce(
+          (preve, curr) => preve + (curr.seen ? 0 : 1),
+          0
+        );
+        return {
+          _id: conv?._id,
+          sender: conv?.sender,
+          receiver: conv?.receiver,
+          unseenMsg: countUnseenMsg,
+          lastMsg: conv.messages[conv?.messages?.length - 1],
+        };
+      });
+
+      socket.emit("conversation", conversation || []);
+    }
+  });
   //****disconnect */
   socket.on("disconnect", () => {
     onlineUser.delete();
